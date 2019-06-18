@@ -64,7 +64,7 @@ app.get('*', (request, response) => response.status(404).send('This route does n
 
 //error handler
 const handleError = (error, response) => {
-  response.render('pages/error', {error: MSMediaKeyError})
+  response.render('pages/error', {error: error})
 }
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
