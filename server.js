@@ -18,7 +18,7 @@ app.use(express.static('public'));
 // Set the view engine for server-side templating
 app.set('view engine', 'ejs');
 
-// API Routes
+// API Routes // get is a request of information without any changes
 // Renders the search form
 app.get('/', (request, response) => {
   response.render('pages/index', {message: 'Woohoo!'})
@@ -27,10 +27,21 @@ app.get('/home')
 // Creates a new search to the Google Books API
 app.post('/searches', createSearch);
 
+
+
 // HELPER FUNCTIONS - constructor/translator
 function Book(info) {
   const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
   this.title = info.title ? info.title : 'No title available';
+  let httpRegex = /^(http: \/\/)/g
+
+  // new instances not complete, working on it
+  this.title = info.title ? info.title : 'No title Available';
+  this.author = info.authors ? info.authors[0] : 'No Author Available'; 
+  this.isbn  = info.isbn ? info.isbn
+  this.image_url = info.imageLinks ? info.imageLinks.smallThumbnail.replace(httpRegex, 'http://') : placeholderImage;
+  this.description = info.description ? info.description
+  this.id = info.id ? info.id 
 }
 
 // Note that .ejs file extension is not required
@@ -57,7 +68,7 @@ function createSearch(request, response) {
   superagent.get(url)
     .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
     .then(results => response.render('pages/searches/show', {searchResults: results})
-    )}
+    )}// maybe add catch here
 
 // error catcher
 app.get('*', (request, response) => response.status(404).send('This route does not exist'));
