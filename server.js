@@ -35,12 +35,13 @@ function Book(info) {
   this.title = info.title ? info.title : 'No title available';
   let httpRegex = /^(http: \/\/)/g
 
+  // new instances not complete, working on it
   this.title = info.title ? info.title : 'No title Available';
   this.author = info.authors ? info.authors[0] : 'No Author Available'; 
   this.isbn  = info.isbn ? info.isbn
   this.image_url = info.imageLinks ? info.imageLinks.smallThumbnail.replace(httpRegex, 'http://') : placeholderImage;
-  this.description
-  this.id
+  this.description = info.description ? info.description
+  this.id = info.id ? info.id 
 }
 
 // Note that .ejs file extension is not required
