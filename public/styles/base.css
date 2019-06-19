@@ -1,3 +1,10 @@
+/* 
+  Portait mode for phones
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+
 body{
-  background-color: rgba(127, 251, 255, 0.479);
+  background-color: rgba(149, 182, 184, 0.836);
 };
