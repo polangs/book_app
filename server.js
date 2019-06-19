@@ -1,11 +1,11 @@
 'use strict';
 
 // Application Dependencies
-const express = require('express');
-const superagent = require('superagent');
+const express = require('express'); 
+const superagent = require('superagent'); //handles all our request
 const pg = require('pg')
 
-// Application Setup
+// Application Setup/dependencies
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -24,16 +24,21 @@ client.on('error', err => console.error(err));
 // Set the view engine for server-side templating
 app.set('view engine', 'ejs');
 
-// API Routes // get is a request of information without any changes
+
+
+///////////////////API Routes // get is a request of information without any changes
 // Renders the search form
 app.get('/', (request, response) => {
   response.render('pages/index', {message: 'Woohoo!'})
 });
+// add app.post ('/searches/)
+//should be 5 app. here
+//needing
+
+
 // app.get('/home')
 // Creates a new search to the Google Books API
 app.post('/searches', createSearch);
-
-
 
 
 // HELPER FUNCTIONS - constructor/translator
@@ -47,8 +52,36 @@ function Book(info) {
   this.isbn = info.industryIdentifiers ? `ISBN_13 ${info.industryIdentifiers[0].identifier}` : 'No ISBN Available';
   this.image_url = info.imageLinks ? info.imageLinks.smallThumbnail.replace(httpRegex, 'http://') : placeholderImage;
   this.description = info.description ? info.description: 'No description Available';
-//   this.id = info.id ? info.id
 }
+///////////////////////////retrieves books from database 
+
+// function getBooks(req,res)
+//   let SQL
+// return client.query(SQL)
+// if (result.rows.rowCount === 0){
+// res.render('pages/index/new')
+// else{
+// }
+// }
+//
+//function createBook
+//
+/////////////////////////creates book in our DB
+//function createBook
+//function newSearch
+////////////////////////retrieves a single book from DB
+//function getBook (req,res)
+//let SQL = 'SELECT .....
+//let values = [req, params.id];
+//client.query(SQL, values)
+//.then(result => res.render('pages/book/show', {book : results.row[0].id}))
+//.catch(err => handleError(err,res))
+//})
+//
+
+
+
+
 
 // Note that .ejs file extension is not required
 function newSearch(request, response) {
@@ -57,10 +90,9 @@ function newSearch(request, response) {
 
   let SQL = `SELECT * FROM books where id =${request.books.books_id}`
 
-  return client.query(SQL)
-    .then(searchResults => {
-      let books = searchResults.rows[0]
-      response.render('/data', {books: searchResults.rows[0]})
+  return client.query(SQL)//////returns a promise//
+    .then(results => {//if not it is gonna continue to .catch
+      response.render('/pages/index', {books: results.rows})
     })
 }
 
