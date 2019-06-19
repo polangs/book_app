@@ -45,13 +45,14 @@ Actual Time needed to complete:
 
 ------------------------------------------------------------------------------------------------------------------------------------------
 
-Number and Name of feature:   Lab 12 Server-Side Templating with EJS
+Number and Name of feature:   Lab 12 Componentization and HTML5 Forms
 
 Estimate Time needed to complete: 4hrs
 
-Start Time: 09:50am
+Start Time: 10:00am
 
-Finish Time: 01:45pm
+Finish Time: pm
 
 Actual Time needed to complete:
 
+HEROKU LINK: https://lab11bookapp-pc.herokuapp.com/ | https://git.heroku.com/lab11bookapp-pc.git
