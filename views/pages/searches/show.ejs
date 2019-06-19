@@ -4,7 +4,7 @@
       <title>Show </title>
   </head>
   <body>
-    <h1>This is show page.</h1>
+    <h1>Search Results</h1>
     <ul>
     <% searchResults.forEach(book => { %>
         <li>
@@ -12,7 +12,8 @@
           <img src=<%= book.image_url %> />
           <p><%= book.author %></p>
           <p><%= book.description %></p>
-
+          <p><%= book.isbn %></p>
+          <p><%= book.imageLinks %></p>
         </li>
     <% }); %>
   </ul>

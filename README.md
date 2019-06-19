@@ -42,3 +42,16 @@ Start Time: 09:50am
 Finish Time: 01:45pm
 
 Actual Time needed to complete:
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+Number and Name of feature:   Lab 12 Server-Side Templating with EJS
+
+Estimate Time needed to complete: 4hrs
+
+Start Time: 09:50am
+
+Finish Time: 01:45pm
+
+Actual Time needed to complete:
+

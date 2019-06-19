@@ -36,7 +36,7 @@ function Book(info) {
 
 //   // new instances not complete, working on it
   this.author = info.authors ? info.authors[0] : 'No Author Available';
-    // this.isbn  = info.isbn ? info.isbn; //edit me  
+  this.isbn = info.industryIdentifiers ? `ISBN_13 ${info.industryIdentifiers[0].identifier}` : 'No ISBN Available';
   this.image_url = info.imageLinks ? info.imageLinks.smallThumbnail.replace(httpRegex, 'http://') : placeholderImage;
   this.description = info.description ? info.description: 'No description Available';
 //   this.id = info.id ? info.id
