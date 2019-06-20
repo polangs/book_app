@@ -3,7 +3,7 @@
   ##Screen = B/w 320px to 479px
 */
 
-@media (min-width: 320px) and (max-width: 480px) {
+/* @media (min-width: 320px) and (max-width: 480px) { */
 
 
 html, body {
@@ -18,7 +18,7 @@ html, body {
 
 main {
   flex: 1;
-  margin-top: 14vw;
+  /* margin-top: 14vw; */
 }
 
-}
+/* } */
