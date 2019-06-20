@@ -1,7 +1,9 @@
 'use strict';
 
+require('dotenv').config();
+
 // Application Dependencies
-const express = require('express'); 
+const express = require('express');
 const superagent = require('superagent'); //handles all our request
 const pg = require('pg')
 
@@ -27,9 +29,6 @@ app.set('view engine', 'ejs');
 
 
 ///////////////////API Routes // get is a request of information without any changes
-app.get('/', (request, response) => {
-  response.render('pages/index', {message: 'Woohoo!'})
-});
 app.get('/', getBooks);
 // add app.post ('/searches/)
 //should be 5 app. here
@@ -53,21 +52,21 @@ function Book(info) {
   this.image_url = info.imageLinks ? info.imageLinks.smallThumbnail.replace(httpRegex, 'http://') : placeholderImage;
   this.description = info.description ? info.description: 'No description Available';
 }
-///////////////////////////retrieves books from database 
+///////////////////////////retrieves books from database
 
-function getBooks(req,res)
-  let SQL = 'SELECT * FROM "books" ; ' ;
+function getBooks(req,res){
+  let SQL = 'SELECT * FROM books;';
 
   return client.query(SQL)
-    .then (result => {
-      if (result.rowCount === 0) {
-      res.render ('pages/searches/new');
-  }else {
-    res.render ('pages/index', { books: result.row });
-  }
-})
-.catch(err => handleError(err,res));
-
+    .then(results => {
+      if (results.rowCount === 0) {
+        res.render ('pages/searches/new');
+      }else {
+        res.render ('pages/index', { books: results.rows});
+      }
+    })
+    .catch(err => handleError(err,res));
+}
 //
 //function createBook
 //
