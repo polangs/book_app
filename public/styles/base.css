@@ -7,9 +7,9 @@
 
 
 html, body {
-  background-color: #999;
-  color: #ddd;
-  font-family: 'helvetica';
+  background-color: rgb(28, 24, 80);
+  color: rgb(135, 171, 226);
+  font-family: 'Montserrat', sans-serif;
   width: 100%;
   height: 100%;
   display: flex;
@@ -18,7 +18,11 @@ html, body {
 
 main {
   flex: 1;
+
   /* margin-top: 14vw; */
+
+  margin-top: 14vw;
+  
 }
 
 /* } */
