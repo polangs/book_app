@@ -28,8 +28,11 @@ app.set('view engine', 'ejs');
 
 
 
+
 ///////////////////API Routes // get is a request of information without any changes
 app.get('/', getBooks);
+app.post('/books', createBook)
+app.get('/book/:id', gettingBook)
 // add app.post ('/searches/)
 //should be 5 app. here
 //needing
@@ -39,19 +42,21 @@ app.get('/', getBooks);
 // Creates a new search to the Google Books API
 app.post('/searches', createSearch);
 
-app.get ('*', (request, response) => response.status(404).send('This route does not exist'));
+
 // HELPER FUNCTIONS - constructor/translator
 function Book(info) {
   const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
   this.title = info.title ? info.title : 'No title available';
   let httpRegex = /^(http:\/\/)/g;
-
   // new instances not complete, working on it
   this.author = info.authors ? info.authors[0] : 'No Author Available';
   this.isbn = info.industryIdentifiers ? `ISBN_13 ${info.industryIdentifiers[0].identifier}` : 'No ISBN Available';
   this.image_url = info.imageLinks ? info.imageLinks.smallThumbnail.replace(httpRegex, 'http://') : placeholderImage;
   this.description = info.description ? info.description: 'No description Available';
 }
+
+
+
 ///////////////////////////retrieves books from database
 
 function getBooks(req,res){
@@ -67,23 +72,54 @@ function getBooks(req,res){
     })
     .catch(err => handleError(err,res));
 }
-//
-//function createBook
-//
+
+
 /////////////////////////creates book in our DB
-//function createBook
-//function newSearch
+
+function createBook(req, res){
+  let { title, author, isbn, image_url, description, bookshelf } = req.body;
+  let SQL = 'INSERT INTO books(title, author, isbn, image_url, description, bookshelf) VALUES ($1, $2, $3, $4, $5); ' ;
+  let values = [title, author, isbn, image_url, description, bookshelf];
+
+  return client.query(SQL, values)
+    .then(() => {
+      SQL = 'SELECT * FROM books WHERE isbn=$1;';
+      values = [req.body.isbn];
+      return client.query(SQL,values)
+        .then(result => res.redirect(`/book/${result.rows[0].id}`))
+        .catch(err => handleError(err,res))
+    })
+    .catch(err => handleError(err,res));
+}
+function newSearch(request, response){
+  response.render('pages/searches/new');
+}
+
 ////////////////////////retrieves a single book from DB
-//function getBook (req,res)
-//let SQL = 'SELECT .....
-//let values = [req, params.id];
-//client.query(SQL, values)
-//.then(result => res.render('pages/book/show', {book : results.row[0].id}))
-//.catch(err => handleError(err,res))
-//})
-//
+function gettingBook (req,res){
+  let SQL = 'SELECT * FROM books WHERE id=$1;';
+  let values = [req.params.id];
+  client.query(SQL, values)
+    .then(result => res.render('pages/books/show', {book : result.row[0].id}))
+    .catch(err => handleError(err,res))
+}
 
 
+//this girl doesnt need API bruh
+function createSearch(request, response) {
+  let url = 'https://www.googleapis.com/books/v1/volumes?q=';
+
+  console.log(request.body);
+  console.log(request.body.search);
+
+  if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`}
+  if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`}
+
+  superagent.get(url)
+    .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
+    .then(results => response.render('pages/searches/show', {searchResults: results}))
+    .catch(err => handleError(err, response));
+}
 
 // Note that .ejs file extension is not required
 function newSearch(request, response) {
@@ -98,26 +134,7 @@ function newSearch(request, response) {
     })
 }
 
-// No API key required
-// Console.log (request.body and request.body.search
-function createSearch(request, response) {
-  let url = 'https://www.googleapis.com/books/v1/volumes?q=';
 
-  console.log(request.body);
-  console.log(request.body.search);
-
-  if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`}
-  if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`}
-
-  // superagent.get(url)
-  //   .then(apiResponse => console.log(util.inspect(apiResponse.body.items, {showhidden: false, depth: null})))
-  //   .then(results => response.render('pages/searches/show', {searchResults: results})
-  //   )}
-  superagent.get(url)
-    .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
-    .then(results => response.render('pages/searches/show', {searchResults: results}))
-    .catch(err => handleError(err, response));
-}
 // error catcher
 app.get('*', (request, response) => response.status(404).send('This route does not exist'));
 
