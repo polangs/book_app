@@ -14,7 +14,7 @@ const util = require('util');
 
 // Application Middleware
 app.use(express.urlencoded({extended:true}));
-app.use(express.static('public'));
+app.use(express.static('public'));//all set to static and would be available to view publicly
 
 //database setup
 const client = new pg.Client(process.env.DATABASE_URL);
@@ -27,10 +27,10 @@ app.set('view engine', 'ejs');
 
 
 ///////////////////API Routes // get is a request of information without any changes
-// Renders the search form
 app.get('/', (request, response) => {
   response.render('pages/index', {message: 'Woohoo!'})
 });
+app.get('/', getBooks);
 // add app.post ('/searches/)
 //should be 5 app. here
 //needing
@@ -40,7 +40,7 @@ app.get('/', (request, response) => {
 // Creates a new search to the Google Books API
 app.post('/searches', createSearch);
 
-
+app.get ('*', (request, response) => response.status(404).send('This route does not exist'));
 // HELPER FUNCTIONS - constructor/translator
 function Book(info) {
   const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
@@ -55,14 +55,19 @@ function Book(info) {
 }
 ///////////////////////////retrieves books from database 
 
-// function getBooks(req,res)
-//   let SQL
-// return client.query(SQL)
-// if (result.rows.rowCount === 0){
-// res.render('pages/index/new')
-// else{
-// }
-// }
+function getBooks(req,res)
+  let SQL = 'SELECT * FROM "books" ; ' ;
+
+  return client.query(SQL)
+    .then (result => {
+      if (result.rowCount === 0) {
+      res.render ('pages/searches/new');
+  }else {
+    res.render ('pages/index', { books: result.row });
+  }
+})
+.catch(err => handleError(err,res));
+
 //
 //function createBook
 //
@@ -78,8 +83,6 @@ function Book(info) {
 //.catch(err => handleError(err,res))
 //})
 //
-
-
 
 
 
@@ -119,8 +122,10 @@ function createSearch(request, response) {
 // error catcher
 app.get('*', (request, response) => response.status(404).send('This route does not exist'));
 
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+
 //error handler
 const handleError = (error, response) => {
   response.render('pages/error', {error: error})
 }
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
