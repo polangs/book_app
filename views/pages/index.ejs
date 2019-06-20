@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+  
   <head>
-    <title>Book Collection</title>
     <link rel="stylesheet" type="text/css" href="/styles/base.css">
   </head>
+
   <body>
+    <%- include('layout/header') %>
       <h1>Best Books!</h1>
-      <p>Number of Books: <%= books.length</p>
+      <p>Number of Books: <%= books.length %></p>
 
     <main>
-      <ul>
+      <ul id="book-list">
         <% books.forEach(book => { %>
           <li>
             <h3><%= book.title %></h3>
-            
+            <img src="<% book.image_url %>">
+            <h3><%= book.author %></h3>
+            <h3><%= book.description %></h3>
+            <h3><%= book.industryIdentifiers %></h3>   
           </li>       
         <% }) %>
 
-      </ul>
-
-
-
+        </ul>
     </main>
+    <%- include('layout/footer') %>
   </body>
 </html>
