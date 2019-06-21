@@ -37,9 +37,6 @@ app.post('/books', createBook)
 app.get('/book/:id', gettingBook)//:d grab from the route
 
 
-
-
-
 // app.get('/home')
 // Creates a new search to the Google Books API
 
