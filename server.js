@@ -31,16 +31,17 @@ app.set('view engine', 'ejs');
 
 ///////////////////API Routes // get is a request of information without any changes
 app.get('/', getBooks);
+app.post('/searches', createSearch);
+app.get('/searches/new', newSearch);
 app.post('/books', createBook)
 app.get('/book/:id', gettingBook)//:d grab from the route
-// add app.post ('/searches/)
-//should be 5 app. here
-//needing
+
+
+
 
 
 // app.get('/home')
 // Creates a new search to the Google Books API
-app.post('/searches', createSearch);
 
 
 // HELPER FUNCTIONS - constructor/translator
@@ -91,6 +92,7 @@ function createBook(req, res){
     })
     .catch(err => handleError(err,res));
 }
+
 function newSearch(request, response){
   response.render('pages/searches/new');
 }
@@ -122,19 +124,18 @@ function createSearch(request, response) {
 }
 
 // Note that .ejs file extension is not required
-function newSearch(request, response) {
-  response.render('pages/index');
-  console.log('books', request.books);
+// function newSearch(request, response) {
+//   response.render('pages/index');
+//   console.log('books', request.books);
 
-  let SQL = `SELECT * FROM books where id =${request.books.books_id}`
+//   let SQL = `SELECT * FROM books where id =${request.books.books_id}`
 
-  return client.query(SQL)//////returns a promise//
-    .then(results => {//if not it is gonna continue to .catch
-      response.render('/pages/index', {books: results.rows})
-    })
-    .catch(err => handleError(err, response));
-
-}
+//   return client.query(SQL)//////returns a promise//
+//     .then(results => {//if not it is gonna continue to .catch
+//       response.render('/pages/index', {books: results.rows})
+//     })
+//     .catch(err => handleError(err, response));
+// }
 
 
 // error catcher
