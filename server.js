@@ -32,7 +32,7 @@ app.set('view engine', 'ejs');
 ///////////////////API Routes // get is a request of information without any changes
 app.get('/', getBooks);
 app.post('/books', createBook)
-app.get('/book/:id', gettingBook)
+app.get('/book/:id', gettingBook)//:d grab from the route
 // add app.post ('/searches/)
 //should be 5 app. here
 //needing
@@ -98,7 +98,7 @@ function newSearch(request, response){
 ////////////////////////retrieves a single book from DB
 function gettingBook (req,res){
   let SQL = 'SELECT * FROM books WHERE id=$1;';
-  let values = [req.params.id];
+  let values = [req.params.id]; //:d getting from route
   client.query(SQL, values)
     .then(result => res.render('pages/books/show', {book : result.row[0].id}))
     .catch(err => handleError(err,res))
