@@ -132,6 +132,8 @@ function newSearch(request, response) {
     .then(results => {//if not it is gonna continue to .catch
       response.render('/pages/index', {books: results.rows})
     })
+    .catch(err => handleError(err, response));
+
 }
 
 
